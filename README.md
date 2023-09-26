@@ -1,7 +1,4 @@
 # CartelWars_Prototype
- https://annabellemruckle.github.io/CartelWars_Prototype/
+https://annabellemruckle.github.io/CartelWars_Prototype/
 
-Movement WASD 
-Jump Space
-Collide with the pink block and switch scenes
-Having issues with the enemy and the NavMesh in the newest version of Unity
+Movement W,A,D:      Duck S:         Jump Space:      Collide with the pink and green block and switch scenes:      Few enemies on the map that wont damage, put will come for you
