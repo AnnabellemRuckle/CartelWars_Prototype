@@ -7,26 +7,27 @@ public class PlayerBehavior : MonoBehaviour
     public float moveSpeed = 10f;
     public float rotateSpeed = 75f;
     public float jumpVelocity = 5f;
+    public float duckedHeight = 0.5f; 
     public float distanceToGround = 0.1f;
-
     public LayerMask groundLayer;
 
     private float vInput;
     private float hInput;
+    private float originalHeight; 
 
     private Rigidbody _rb;
     private CapsuleCollider _col;
 
     public delegate void JumpingEvent();
-
     public event JumpingEvent playerJump;
 
     private void Start()
     {
         _rb = GetComponent<Rigidbody>();
         _col = GetComponent<CapsuleCollider>();
+        originalHeight = _col.height;
 
-        // Subscribe the PerformJump method to the playerJump event
+       
         playerJump += PerformJump;
     }
 
@@ -38,6 +39,17 @@ public class PlayerBehavior : MonoBehaviour
         if (IsGrounded() && Input.GetKeyDown(KeyCode.Space))
         {
             playerJump();
+        }
+
+      
+        if (Input.GetKey(KeyCode.S))
+        {
+            Duck();
+        }
+        else
+        {
+            
+            ReleaseDuck();
         }
     }
 
@@ -52,7 +64,7 @@ public class PlayerBehavior : MonoBehaviour
 
     private bool IsGrounded()
     {
-        Vector3 capsuleBottom = new Vector3(_col.bounds.center.x, _col.bounds.min.y, _col.bounds.center.x);
+        Vector3 capsuleBottom = new Vector3(_col.bounds.center.x, _col.bounds.min.y, _col.bounds.center.z);
         bool grounded = Physics.CheckCapsule(_col.bounds.center, capsuleBottom, distanceToGround, groundLayer, QueryTriggerInteraction.Ignore);
 
         return grounded;
@@ -60,7 +72,16 @@ public class PlayerBehavior : MonoBehaviour
 
     private void PerformJump()
     {
-        // Apply jump velocity to the Rigidbody
         _rb.velocity = new Vector3(_rb.velocity.x, jumpVelocity, _rb.velocity.z);
+    }
+
+    private void Duck()
+    {
+        _col.height = duckedHeight;
+    }
+
+    private void ReleaseDuck()
+    {
+        _col.height = originalHeight;
     }
 }
